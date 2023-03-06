@@ -1960,15 +1960,20 @@ public class ProcessService {
         return scheduleMapper.selectAllByProcessDefineArray(codes);
     }
 
-    /**
-     * find last task instance in the date interval
-     *
-     * @param taskCode     taskCode
-     * @param dateInterval dateInterval
-     * @return task instance
-     */
-    public TaskInstance findLastTaskInstanceInterval(long taskCode, DateInterval dateInterval) {
-        return taskInstanceMapper.queryLastTaskInstance(taskCode, dateInterval.getStartTime(), dateInterval.getEndTime());
+//    /**
+//     * find last task instance in the date interval
+//     *
+//     * @param taskCode     taskCode
+//     * @param dateInterval dateInterval
+//     * @return task instance
+//     */
+//    public TaskInstance findLastTaskInstanceInterval(long taskCode, DateInterval dateInterval) {
+//        return taskInstanceMapper.queryLastTaskInstance(taskCode, dateInterval.getStartTime(), dateInterval.getEndTime());
+//    }
+
+    // lxs
+    public TaskInstance findLastTaskInstanceInterval(long taskCode, Integer processId) {
+        return taskInstanceMapper.queryLastTaskInstance(taskCode, processId);
     }
 
     /**

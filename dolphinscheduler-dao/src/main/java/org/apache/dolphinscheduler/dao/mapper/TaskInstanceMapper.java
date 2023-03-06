@@ -73,15 +73,17 @@ public interface TaskInstanceMapper extends BaseMapper<TaskInstance> {
 
     int updateHostAndSubmitTimeById(@Param("id") int id, @Param("host") String host, @Param("submitTime") Date submitTime);
 
-    /**
-     * query last task instance
-     *
-     * @param taskCode taskCode
-     * @param startTime startTime
-     * @param endTime endTime
-     * @return task instance
-     */
-    TaskInstance queryLastTaskInstance(@Param("taskCode") long taskCode, @Param("startTime") Date startTime, @Param("endTime") Date endTime);
+//    /**
+//     * query last task instance
+//     *
+//     * @param taskCode taskCode
+//     * @param startTime startTime
+//     * @param endTime endTime
+//     * @return task instance
+//     */
+//    TaskInstance queryLastTaskInstance(@Param("taskCode") long taskCode, @Param("startTime") Date startTime, @Param("endTime") Date endTime);
+    // lxs
+    TaskInstance queryLastTaskInstance(@Param("taskCode") long taskCode, @Param("processId") Integer processId);
 
     List<TaskInstance> queryLastTaskInstanceList(@Param("taskCodes") Set<Long> taskCodes, @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 }

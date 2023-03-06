@@ -120,12 +120,12 @@ public class DependentExecute {
             if (dependentItem.getDepTaskCode() == Constants.DEPENDENT_ALL_TASK_CODE) {
                 if (!processInstance.getState().typeIsFinished()) {
                     logger.info("Wait for the dependent workflow to complete, processDefiniteCode:{}, taskCode:{}, processInstanceId:{}, processInstance state:{}",
-                        dependentItem.getDefinitionCode(), dependentItem.getDepTaskCode(), processInstance.getId(), processInstance.getState());
+                            dependentItem.getDefinitionCode(), dependentItem.getDepTaskCode(), processInstance.getId(), processInstance.getState());
                     return DependResult.WAITING;
                 }
                 result = dependResultByProcessInstance(processInstance, dateInterval);
             } else {
-                result = getDependTaskResult(processInstance, dependentItem.getDepTaskCode(), dateInterval);
+                result = getDependTaskResult(processInstance, dependentItem.getDepTaskCode(), dateInterval); //lxs
             }
             if (result != DependResult.SUCCESS) {
                 break;
@@ -144,8 +144,8 @@ public class DependentExecute {
             if (!taskRelations.isEmpty()) {
                 List<TaskDefinitionLog> taskDefinitionLogs = processService.genTaskDefineList(taskRelations);
                 Map<Long, String> definiteTask = taskDefinitionLogs.stream().filter(log -> !log.getTaskType().equals(TaskType.SUB_PROCESS.getDesc())
-                        || !log.getTaskType().equals(TaskType.DEPENDENT.getDesc())
-                        || !log.getTaskType().equals(TaskType.CONDITIONS.getDesc()))
+                                || !log.getTaskType().equals(TaskType.DEPENDENT.getDesc())
+                                || !log.getTaskType().equals(TaskType.CONDITIONS.getDesc()))
                         .filter(log -> log.getFlag().equals(Flag.YES))
                         .collect(Collectors.toMap(TaskDefinition::getCode, TaskDefinitionLog::getName));
                 if (!definiteTask.isEmpty()) {
@@ -157,14 +157,14 @@ public class DependentExecute {
                     Map<Long, TaskInstance> taskInstanceMap = new HashMap<>();
                     for (TaskInstance instance : taskInstanceList) {
                         taskInstanceMap.compute(instance.getTaskCode(), (k, v) -> {
-                           if (v == null) {
-                               v = instance;
-                           } else {
-                               if (v.getId() < instance.getId()) {
-                                   v = instance;
-                               }
-                           }
-                           return v;
+                            if (v == null) {
+                                v = instance;
+                            } else {
+                                if (v.getId() < instance.getId()) {
+                                    v = instance;
+                                }
+                            }
+                            return v;
                         });
                         definiteTask.remove(instance.getTaskCode());
                     }
@@ -195,7 +195,10 @@ public class DependentExecute {
      * get depend task result
      */
     private DependResult getDependTaskResult(ProcessInstance processInstance, long taskCode, DateInterval dateInterval) {
-        TaskInstance taskInstance = processService.findLastTaskInstanceInterval(taskCode, dateInterval);
+        Date scheduleTime = processInstance.getScheduleTime();
+        // lxs
+        // TaskInstance taskInstance = processService.findLastTaskInstanceInterval(taskCode, dateInterval);
+        TaskInstance taskInstance = processService.findLastTaskInstanceInterval(taskCode, processInstance.getId());
         if (taskInstance == null) {
             TaskDefinition taskDefinition = processService.findTaskDefinitionByCode(taskCode);
             if (taskDefinition == null) {
